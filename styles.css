@@ -79,3 +79,7 @@ html, body{
     flex-flow: row nowrap;
     justify-content: space-around;
 }
+
+[data-api-term="description"]>.data{
+    text-transform: capitalize;
+}
