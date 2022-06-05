@@ -16,10 +16,9 @@ html, body{
 
 .search-bar-wrapper{
     grid-row: 2;
-    place-self: center;
-
-    position: relative;
-    width: 500px;
+    align-self: center;
+    justify-content: start;
+    width: 92%;
     height: 100px;
 }
 
@@ -28,19 +27,55 @@ html, body{
     border: none;
     outline: none;
 
-    width: 500px;
-    height: 60px;
+    width: 100%;
+    height: auto;
     font-size: 2rem;
     font-weight: 900;
 
     padding-bottom: 4px;
+    margin-left: 24px;
     border-bottom: solid thin grey;
     background-color: rgba(255, 255, 255, 0);
 
+    color: white;
+
+}
+
+#search-bar::placeholder{
+    color: black;
 }
 
 /*The label is hidden and is only there for accessibility purposes*/
 .search-bar-wrapper label{
+    display: inline-block;
     visibility: hidden;
     height: 0;
+    width: 0;
+}
+
+.info-wrapper{
+    grid-row: 3;
+
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 15vh;
+}
+
+.main-info{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.data-container{
+    display: flex;
+    flex-flow: column nowrap;
+    column-gap: 8px;
+}
+
+.additional-info{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
 }
