@@ -2,11 +2,25 @@
 const dataContainerList = document.querySelectorAll('div[data-api-term]');
 
 let weatherMetaData = {
-  tempUnit: 'C',
-  location: 'Dubai' //This has a dummy value for the time being
+  tempUnit: 'c',
+  weatherObject: {},
+  getWeatherPromise: async function(location){
+    let apiKey = '9ccfde44cd99c120bad6a7b986a92fb2';
+    let response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`, {
+      mode: 'cors',
+    });
+  
+    if(!response.ok){
+      const error = await response.json();
+      throw error;
+    }
+  
+    weatherPromise = await response.json();
+    return weatherPromise;
+  },
 }
 
-//Factory Function to create a WeatherDataObject
+//Factory Function to create objects that control the display
 function createWeatherDataObject(dataContainer){
   
   /*Field metadata,
@@ -15,43 +29,55 @@ function createWeatherDataObject(dataContainer){
   let fieldCategory= dataContainer.getAttribute('data-category');
   let fieldName = dataContainer.getAttribute('data-api-term');
   let fieldValue;
-  
-  //Fetchnig Weather Data
-  const getFieldValue = async function(){
-    let apiKey = '9ccfde44cd99c120bad6a7b986a92fb2';
-    let response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${weatherMetaData.location}&appid=${apiKey}`);
-  
-    if(!response.ok){
-      const error = await response.json();
-      throw error;
-    }
-  
-    let data = await response.json();
+
+  //Below is a function that updates the HTML elements
+  const updateDataContainer = function(weatherObject){
     if(fieldName != 'description'){
-      fieldValue = data[fieldCategory][fieldName];
+      fieldValue = weatherObject[fieldCategory][fieldName];
+      //Convert temperature values based on the tempUnit
+      if(dataContainer.classList.contains('temperature')){
+        weatherMetaData.tempUnit === 'c' 
+        ? fieldValue = Math.round(fieldValue - 273.15) + ' C°'
+        : fieldValue = Math.round(fieldValue * (9/5) - 459.67) + ' F°';
+      }
     } else{
-      fieldValue = data.weather[0].description;
+      fieldValue = weatherObject.weather[0].description;
     }
-
-    return fieldValue;
+    
+    dataContainer.querySelector('.data').textContent
+      = fieldValue; 
 
   };
 
-  //Below is a function that uses getFieldValue to update the displayed HTML
-  const updateDataContainer = function(){
-    let fieldValuePromise = getFieldValue(location);
-
-    fieldValuePromise.then((fieldValue) => {
-      const dataElement 
-      = dataContainer.querySelector('.data');
-      dataElement.textContent = fieldValue;
-    }).catch((err) => console.log(err.message));
-  };
-
-  return {getFieldValue, updateDataContainer};
+  return {updateDataContainer};
 
 }
 
-dataContainer = Array.from(dataContainerList)[8];
-let mainTempDemo = createWeatherDataObject(dataContainer);
-mainTempDemo.updateDataContainer();
+let fetchedWeatherPromise;
+
+//Display weather data for the location requested by the user
+searchBarForm = document.querySelector('.search-bar-form');
+searchBarForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let location = searchBarForm.querySelector('#search-bar').value;
+
+fetchedWeatherPromise = weatherMetaData.getWeatherPromise(location).then( 
+    (data) => {
+      dataContainerList.forEach((dataContainer) => {
+        createWeatherDataObject(dataContainer)
+        .updateDataContainer(data);
+      });
+    }).catch((err) => console.log(err.message));
+});
+
+//Convert weather data
+unitToggleButton = document.querySelector('.unit-toggle');
+unitToggleButton.addEventListener('click', (e) => {
+  if(weatherMetaData.tempUnit === 'c'){
+    weatherMetaData.tempUnit = 'f'
+  } else {
+    weatherMetaData.tempUnit = 'c'
+  }
+  
+
+});

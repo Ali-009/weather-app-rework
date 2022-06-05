@@ -9,13 +9,13 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="search-bar-wrapper">
+        <form action="" class="search-bar-form">
             <label for="search-bar">Search</label>
             <input type="search" id="search-bar" placeholder="Search...">
-        </div>
+        </form>
         <div class="info-wrapper">
             <div class="main-info">
-                <div class="data-container" data-api-term="temp"
+                <div class="data-container temperature" data-api-term="temp"
                 data-category="main">
                     <div class="label">
                         Temperature
@@ -24,7 +24,7 @@
     
                     </div>
                 </div>
-                <div class="data-container" data-api-term="feels_like"
+                <div class="data-container temperature" data-api-term="feels_like"
                 data-category="main">
                     <div class="label">
                         Feels Like
@@ -33,7 +33,7 @@
                         
                     </div>
                 </div>
-                <div class="data-container" data-api-term="temp_min"
+                <div class="data-container temperature" data-api-term="temp_min"
                 data-category="main">
                     <div class="label">
                         Minimum Temperature
@@ -42,10 +42,10 @@
                         
                     </div>
                 </div>
-                <div class="data-container" data-api-term="temp_max"
+                <div class="data-container temperature" data-api-term="temp_max"
                 data-category="main">
                     <div class="label">
-                        Maximum Tempperature
+                        Maximum Temperature
                     </div>
                     <div class="data">
                         
