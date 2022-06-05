@@ -80,4 +80,10 @@ html, body{
     justify-content: space-around;
 }
 
+<<<<<<< HEAD
 
+=======
+[data-api-term="description"]>.data{
+    text-transform: capitalize;
+}
+>>>>>>> script-rework
