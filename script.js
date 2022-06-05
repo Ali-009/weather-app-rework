@@ -1,11 +1,6 @@
 //Fetching all relevant data elements
 const dataContainerList = document.querySelectorAll('div[data-api-term]');
 
-<<<<<<< HEAD
-async function getWeatherData(locationInput){
-
-    let apiKey = '9ccfde44cd99c120bad6a7b986a92fb2';
-=======
 let weatherMetaData = {
   tempUnit: 'C',
   location: 'Dubai' //This has a dummy value for the time being
@@ -13,7 +8,6 @@ let weatherMetaData = {
 
 //Factory Function to create a WeatherDataObject
 function createWeatherDataObject(dataContainer){
->>>>>>> script-rework
   
   /*Field metadata,
   e.g. fieldCategory = main, fieldName = temp and 
@@ -33,25 +27,6 @@ function createWeatherDataObject(dataContainer){
     }
   
     let data = await response.json();
-<<<<<<< HEAD
-  
-    /*let weatherKelvin = data.main.temp;
-    let weatherCelsius = Math.round(weatherKelvin - 273.15);
-    let weatherFahrenheit = Math.round(weatherKelvin * (9/5) - 459.67);
-  
-    let weatherDescription = data.weather[0].description;
-  
-    return {weatherCelsius, weatherFahrenheit, weatherDescription};*/
-
-    return data;
-}
-
-/*To constantly update the UI, we need an asynchronous function*/
-//For that to happen, we need to keep calling getWeatherData in a loop
-//Data Containers is an array of elements onto which we display the data we are asynchronously fetching
-
-
-=======
     if(fieldName != 'description'){
       fieldValue = data[fieldCategory][fieldName];
     } else{
@@ -80,4 +55,3 @@ function createWeatherDataObject(dataContainer){
 dataContainer = Array.from(dataContainerList)[8];
 let mainTempDemo = createWeatherDataObject(dataContainer);
 mainTempDemo.updateDataContainer();
->>>>>>> script-rework
