@@ -1,9 +1,29 @@
 //Fetching all relevant data elements
 const dataContainerList = document.querySelectorAll('div[data-api-term]');
+const mainInfoElement = document.querySelector('.main-info');
+const additionalInfoElement = document.querySelector('.additional-info');
+//Clear the output whenever it need not be displayed
+function clearOutput(){
+  mainInfoElement.style.visibility = 'hidden';
+  additionalInfoElement.style.visibility = 'hidden';
+}
+function displayOutput(){
+  mainInfoElement.style.visibility = 'visible';
+  additionalInfoElement.style.visibility = 'visible';
+}
+function handleError(err){
+  clearOutput();
+  const errorInfoElement = document.querySelector('.error-info');
+  errorInfoElement.style.order = '-1';
+  errorInfoElement.textContent = 'Error: ' + err.message;
+}
+
+//We initially don't display any output
+clearOutput();
 
 let weather = {
   tempUnit: 'c',
-  searchPromise: '', //A promise for the weather data requested by the user
+  searchPromise: null, //A promise for the weather data requested by the user
   getWeatherPromise: async function(location){
     let apiKey = '9ccfde44cd99c120bad6a7b986a92fb2';
     let response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`, {
@@ -57,26 +77,33 @@ function createWeatherDataObject(dataContainer){
 searchBarForm = document.querySelector('.search-bar-form');
 searchBarForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  //Clear Error
+  document.querySelector('.error-info').style.order = '1';
+  document.querySelector('.error-info').textContent = '';
   let location = searchBarForm.querySelector('#search-bar').value;
 
-weather.searchPromise = weather.getWeatherPromise(location).then( 
+  weather.searchPromise = weather.getWeatherPromise(location).then( 
     (data) => {
       dataContainerList.forEach((dataContainer) => {
         createWeatherDataObject(dataContainer)
         .updateDataContainer(data);
       });
-
+      displayOutput();
       return data; //Returning data so that the promise can be reobserved
-    }).catch((err) => console.log(err.message));
+    }).catch(handleError);
 });
 
 //Convert weather data
 unitToggleButton = document.querySelector('.unit-toggle');
 unitToggleButton.addEventListener('click', (e) => {
+  if(weather.searchPromise === null){
+    return;
+  }
+
   if(weather.tempUnit === 'c'){
-    weather.tempUnit = 'f'
+    weather.tempUnit = 'f';
   } else {
-    weather.tempUnit = 'c'
+    weather.tempUnit = 'c';
   }
 
   weather.searchPromise.then((data) => {
@@ -88,5 +115,6 @@ unitToggleButton.addEventListener('click', (e) => {
         .updateDataContainer(data);
       }
     });
-  }).catch((err) => console.log(err.message));
+  }).catch(handleError);
 });
+

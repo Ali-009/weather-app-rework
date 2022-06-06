@@ -2,16 +2,23 @@ html, body{
     height: 100%;
     width: 100%;
     margin: 0;
-    font-family: sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .page-wrapper{
     height: 100%;
-    background-image: url(./demo-images/pero-kalimero-9BJRGlqoIUk-unsplash.jpg);
+    background-image: url(./images/pero-kalimero-9BJRGlqoIUk-unsplash.jpg);
     background-size: cover;
 
     display: grid;
     grid-template-rows: 1fr auto 1fr;
+}
+
+.page-title{
+    align-self: center;
+    margin-left: 24px;
+    color: white;
+    text-shadow: black 1px 1px 4px;
 }
 
 .search-bar-form{
@@ -30,7 +37,7 @@ html, body{
 
     width: 100%;
     height: auto;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 900;
 
     padding-bottom: 4px;
@@ -38,11 +45,13 @@ html, body{
     background-color: rgba(255, 255, 255, 0);
 
     color: white;
+    text-shadow: black 1px 1px 4px;
 
 }
 
 #search-bar::placeholder{
     color: black;
+    text-shadow: none;
 }
 
 /*The label is hidden and is only there for accessibility purposes*/
@@ -58,7 +67,7 @@ html, body{
 
     display: flex;
     flex-flow: column nowrap;
-    row-gap: 15vh;
+    row-gap: 8vh;
 }
 
 .main-info{
@@ -74,6 +83,16 @@ html, body{
     row-gap: 12px;
 }
 
+.data-container>.label{
+    font-size: 0.7rem;
+    font-weight: 400;
+}
+
+.data-container>.data{
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
 .main-info>.data-container>.label{
     width: min-content;
 }
@@ -84,6 +103,39 @@ html, body{
     justify-content: space-around;
 }
 
-[data-api-term="description"]>.data{
+.error-info{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    color: rgb(233, 68, 68);
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+[data-api-term="description"]>.data, .error-info{
     text-transform: capitalize;
+}
+
+button.unit-toggle{
+    appearance: none;
+    outline: none;
+    border: solid thin grey;
+    
+    background-color: white;
+    border-radius: 24px;
+    padding: 4px;
+    font-size: 0.8rem;
+    transition: box-shadow 0.1s;
+
+    width: 100px;
+    height: 40px;
+}
+
+button.unit-toggle:hover{
+    cursor: pointer;
+    box-shadow: 3px 3px 2px -1px rgba(0, 0, 0, 0.4);
+}
+
+button.unit-toggle:active{
+    box-shadow: none;
 }
