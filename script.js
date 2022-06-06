@@ -1,9 +1,9 @@
 //Fetching all relevant data elements
 const dataContainerList = document.querySelectorAll('div[data-api-term]');
 
-let weatherMetaData = {
+let weather = {
   tempUnit: 'c',
-  weatherObject: {},
+  searchPromise: '', //A promise for the weather data requested by the user
   getWeatherPromise: async function(location){
     let apiKey = '9ccfde44cd99c120bad6a7b986a92fb2';
     let response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`, {
@@ -36,7 +36,7 @@ function createWeatherDataObject(dataContainer){
       fieldValue = weatherObject[fieldCategory][fieldName];
       //Convert temperature values based on the tempUnit
       if(dataContainer.classList.contains('temperature')){
-        weatherMetaData.tempUnit === 'c' 
+        weather.tempUnit === 'c' 
         ? fieldValue = Math.round(fieldValue - 273.15) + ' C°'
         : fieldValue = Math.round(fieldValue * (9/5) - 459.67) + ' F°';
       }
@@ -53,31 +53,40 @@ function createWeatherDataObject(dataContainer){
 
 }
 
-let fetchedWeatherPromise;
-
 //Display weather data for the location requested by the user
 searchBarForm = document.querySelector('.search-bar-form');
 searchBarForm.addEventListener('submit', (e) => {
   e.preventDefault();
   let location = searchBarForm.querySelector('#search-bar').value;
 
-fetchedWeatherPromise = weatherMetaData.getWeatherPromise(location).then( 
+weather.searchPromise = weather.getWeatherPromise(location).then( 
     (data) => {
       dataContainerList.forEach((dataContainer) => {
         createWeatherDataObject(dataContainer)
         .updateDataContainer(data);
       });
+
+      return data; //Returning data so that the promise can be reobserved
     }).catch((err) => console.log(err.message));
 });
 
 //Convert weather data
 unitToggleButton = document.querySelector('.unit-toggle');
 unitToggleButton.addEventListener('click', (e) => {
-  if(weatherMetaData.tempUnit === 'c'){
-    weatherMetaData.tempUnit = 'f'
+  if(weather.tempUnit === 'c'){
+    weather.tempUnit = 'f'
   } else {
-    weatherMetaData.tempUnit = 'c'
+    weather.tempUnit = 'c'
   }
-  
 
+  weather.searchPromise.then((data) => {
+    dataContainerList.forEach((dataContainer) => {
+      if(!dataContainer.classList.contains('temperature')){
+        return;
+      } else {
+        createWeatherDataObject(dataContainer)
+        .updateDataContainer(data);
+      }
+    });
+  }).catch((err) => console.log(err.message));
 });
