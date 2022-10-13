@@ -26,7 +26,7 @@ let weather = {
   searchPromise: null, //A promise for the weather data requested by the user
   getWeatherPromise: async function(location){
     let apiKey = '9ccfde44cd99c120bad6a7b986a92fb2';
-    let response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`, {
+    let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`, {
       mode: 'cors',
     });
   
